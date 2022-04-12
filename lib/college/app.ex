@@ -180,10 +180,10 @@ defmodule College.App do
     |> Repo.insert()
   end
 
-  def cancel_register_course(ids, idc) do
+  def cancel_register_course(student_id, course_id) do
     query =
       from sc in StudentsCourses,
-        where: sc.student_id == ^ids and sc.course_id == ^idc
+        where: sc.student_id == ^student_id and sc.course_id == ^course_id
 
     case Repo.one(query) do
       nil -> {:error, "not found"}

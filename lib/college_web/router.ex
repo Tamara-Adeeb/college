@@ -25,7 +25,7 @@ defmodule CollegeWeb.Router do
 
     resources "/students", StudentController, only: [:create, :delete, :update, :index]
     put "/students/:student_id/courses/:course_id", StudentController, :register_course
-    delete "/students/:ids/courses/:idc", StudentController, :cancel_register_course
+    delete "/students/:student_id/courses/:course_id", StudentController, :cancel_register_course
 
     resources "/teachers", TeacherController, only: [:create, :delete, :update, :index]
     post "/teachers/courses", TeacherController, :create_teaacher_with_course

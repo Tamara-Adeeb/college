@@ -42,7 +42,7 @@ defmodule CollegeWeb.StudentController do
   end
 
   def cancel_register_course(conn, params) do
-    case App.cancel_register_course(params["ids"], params["idc"]) do
+    case App.cancel_register_course(params["student_id"], params["course_id"]) do
       {:ok, _} -> json(conn, %{status: "ok"})
       {:error, _} -> json(conn, %{error: "not found"})
     end
