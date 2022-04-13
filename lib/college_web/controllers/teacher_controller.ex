@@ -20,14 +20,21 @@ defmodule CollegeWeb.TeacherController do
 
   def create_teaacher_with_course(conn, params) do
     case App.create_course_teacher(params) do
-      {:ok, [course, teacher]} ->
+      # {:ok, [course, teacher]} ->
+      #   render(conn, "create.json", course_teacher: [course, teacher])
+
+      {:ok, %{course: course, teacher: teacher}} ->
+        course = App.update_semester(course)
         render(conn, "create.json", course_teacher: [course, teacher])
 
-      {:ok, {:error, reason}} ->
+      {:error, :teacher, reason, _} ->
         render(conn, "error.json", error: reason.errors)
 
-      {:error, changeset} ->
-        render(conn, "error.json", error: changeset.errors)
+      {:error, :course, reason, _} ->
+        case Map.has_key?(reason.changes.semester, :errors) do
+          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+          false -> render(conn, "error.json", error: reason.errors)
+        end
     end
   end
 
