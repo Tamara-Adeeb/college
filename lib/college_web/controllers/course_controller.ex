@@ -11,11 +11,15 @@ defmodule CollegeWeb.CourseController do
   def create(conn, params) do
     case App.create_course(params) do
       {:ok, course} ->
+        course = App.update_semester(course)
+
         render(conn, "create.json", course: course |> Repo.preload([:teacher, :students]))
 
       {:error, reason} ->
-        IO.inspect(reason.errors)
-        render(conn, "error.json", error: reason.errors)
+        case Map.has_key?(reason.changes.semester, :errors) do
+          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+          false -> render(conn, "error.json", error: reason.errors)
+        end
     end
   end
 
@@ -29,14 +33,17 @@ defmodule CollegeWeb.CourseController do
   def update(conn, params) do
     case App.update_course(params) do
       {:ok, course} ->
+        course = App.update_semester(course)
         render(conn, "update.json", course: course |> Repo.preload([:teacher, :students]))
 
       {:error, "not found"} ->
         json(conn, %{error: "not found"})
 
       {:error, reason} ->
-        IO.inspect(reason.errors)
-        render(conn, "error.json", error: reason.errors)
+        case Map.has_key?(reason.changes.semester, :errors) do
+          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+          false -> render(conn, "error.json", error: reason.errors)
+        end
     end
   end
 end

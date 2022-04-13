@@ -24,7 +24,7 @@ defmodule CollegeWeb.Router do
     post "/session/delete", SessionController, :delete
 
     resources "/students", StudentController, only: [:create, :delete, :update, :index]
-    put "/students/:student_id/courses/:course_id", StudentController, :register_course
+    post "/students/:student_id/courses/:course_id", StudentController, :register_course
     delete "/students/:student_id/courses/:course_id", StudentController, :cancel_register_course
 
     resources "/teachers", TeacherController, only: [:create, :delete, :update, :index]

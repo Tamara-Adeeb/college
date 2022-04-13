@@ -44,7 +44,7 @@ defmodule CollegeWeb.CourseView do
 
   def render("error.json", %{error: error}) do
     %{
-      error: render_many(error, __MODULE__, "show_error.json")
+      error: render_many(error, __MODULE__, "show_error.json"),
     }
   end
 

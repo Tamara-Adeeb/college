@@ -34,7 +34,7 @@ defmodule College.Repo.Migrations.Initial do
     create table(:courses) do
       add :name, :string, null: false
       add :code, :string, null: false
-      add :semester, :string, null: false
+      add :semester, :map, null: false
       add :description, :text
       add :teacher_id, references(:teachers)
       timestamps()

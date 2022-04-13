@@ -20,7 +20,7 @@ defmodule College.MixProject do
   def application do
     [
       mod: {College.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools,:httpoison]
     ]
   end
 
@@ -46,7 +46,11 @@ defmodule College.MixProject do
       {:faker, "~> 0.17.0"},
       {:poison, "~> 5.0"},
       {:ex_machina, "~> 2.7.0", only: :test},
-      {:paginator, "~> 1.1.0"}
+      {:paginator, "~> 1.1.0"},
+      {:httpoison, "~> 1.8"},
+      {:mox, "~> 1.0", only: [:dev, :test]},
+      {:polymorphic_embed, "~> 1.9.0"},
+      {:ecto_enum, "~> 1.4"}
     ]
   end
 

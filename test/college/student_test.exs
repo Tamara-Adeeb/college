@@ -54,5 +54,33 @@ defmodule College.StudentTest do
                first_name: ["can't be blank"]
              } = errors_on(changeset)
     end
+
+    test "list of students" do
+      result = student_fixture()
+
+      students = App.all_students(%{})
+      assert  %Paginator.Page{
+        entries: [result],
+        metadata: %Paginator.Page.Metadata{
+          after: nil
+          , before: nil
+          , limit: 3
+          , total_count: 0,
+           total_count_cap_exceeded: false}} = students
+
+
+    end
+
+    test "empty list in case of no students " do
+      students = App.all_students(%{})
+      assert  %Paginator.Page{
+        entries: [],
+        metadata: %Paginator.Page.Metadata{
+          after: nil
+          , before: nil
+          , limit: 3
+          , total_count: 0,
+           total_count_cap_exceeded: false}} = students
+    end
   end
 end

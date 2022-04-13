@@ -4,7 +4,6 @@ defmodule College.App do
   alias College.Repo
   import Ecto.Query
 
-
   def create_user(params) do
     %User{}
     |> User.registration_changeset(params)
@@ -217,5 +216,17 @@ defmodule College.App do
 
         {teacher, students}
     end
+  end
+
+  def update_semester(course) do
+    semester = Map.from_struct(course.semester)
+
+    name =
+      course.semester.__struct__
+      |> Module.split()
+      |> List.last()
+
+    semester = Map.put_new(semester, :name, name)
+    Map.replace(course, :semester, semester)
   end
 end
