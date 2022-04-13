@@ -227,14 +227,7 @@ defmodule College.App do
   end
 
   def update_semester(course) do
-    semester = Map.from_struct(course.semester)
-
-    name =
-      course.semester.__struct__
-      |> Module.split()
-      |> List.last()
-
-    semester = Map.put_new(semester, :name, name)
-    Map.replace(course, :semester, semester)
+    metadata = Map.from_struct(course.metadata)
+    Map.replace(course, :metadata, metadata)
   end
 end

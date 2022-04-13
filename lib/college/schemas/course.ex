@@ -8,12 +8,14 @@ defmodule College.Schemas.Course do
   schema "courses" do
     field :name, :string
     field :code, :string
-    field :semester,PolymorphicEmbed,
+    field :semester, Ecto.Enum, values: [:first, :second, :third, :fourth], null: false
+
+    field :metadata, PolymorphicEmbed,
       types: [
-        first: [module: First, identify_by_fields: [:period, :is_optional]],
-        second: [module: Second, identify_by_fields: [:period, :is_optional]],
-        third: [module: Third, identify_by_fields:  [:period, :is_honor, :is_research]],
-        fourth: [module: Fourth, identify_by_fields: [:period, :is_honor, :is_research]]
+        first: First,
+        second: Second,
+        third: Third,
+        fourth: Fourth
       ],
       on_type_not_found: :raise,
       on_replace: :update
@@ -29,32 +31,20 @@ defmodule College.Schemas.Course do
   end
 
   def changeset(courses, params \\ %{}) do
-    IO.inspect(params)
-    # first = Map.delete(%First{period: "1", is_optional: true}, :__meta__) |> Map.delete(:__struct__) |> IO.inspect()
-    # {_ , params }= Map.get_and_update(params, "semester",fn current_value -> {current_value,%{is_optional: true, period: "1"}} end)
+    params = add_type_to_metadata(params)
+
     courses
-    |> cast(params, [:name, :code, :description, :teacher_id])
+    |> cast(params, [:name, :code, :description, :teacher_id, :semester])
+    |> cast_polymorphic_embed(:metadata, required: true, message: "metatdata should be of type map")
     |> validate_required([:name, :code, :teacher_id])
     |> foreign_key_constraint(:teacher)
-    |> unique_constraint(:code, message: "this code has already been taken") |> IO.inspect()
-    # |> cast_polymorphic_embed(:semester, required: false)
-    |> cast_polymorphic_embed(:semester,
-      with: [
-        first: &First.changeset/2,
-        second: &Second.changeset/2,
-        third: &Third.changeset/2,
-        fourth: &Fourth.changeset/2
-      ]
-    )
-    |> unique_constraint(:code, message: "this code has already been taken") |> IO.inspect()
+    |> unique_constraint(:code, message: "this code has already been taken")
   end
 
-  def validate_semester(changeset, field, options \\ []) do
-    validate_change(changeset, field, fn _, value ->
-      case value in ["first", "second", "third", "fourth"] do
-        true -> []
-        false -> [{field, options[:message] || "Invalid semester"}]
-      end
-    end)
+  def add_type_to_metadata(%{"semester" => semester, "metadata" => metadata} = params)
+      when is_map(metadata) do
+    metadata = Map.merge(metadata, %{"__type__" => semester})
+    Map.put(params, "metadata", metadata)
   end
+
 end

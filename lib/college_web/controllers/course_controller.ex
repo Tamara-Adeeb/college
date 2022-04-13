@@ -5,7 +5,7 @@ defmodule CollegeWeb.CourseController do
 
   def index(conn, params) do
     %{entries: entries, metadata: metadata} = App.all_courses(params)
-    courses = Enum.map(entries, fn course ->  App.update_semester(course) end )
+    courses = Enum.map(entries, fn course -> App.update_semester(course) end)
     render(conn, "index.json", infinite_cursor: %{entries: courses, metadata: metadata})
   end
 
@@ -17,8 +17,8 @@ defmodule CollegeWeb.CourseController do
         render(conn, "create.json", course: course |> Repo.preload([:teacher, :students]))
 
       {:error, reason} ->
-        case Map.has_key?(reason.changes.semester, :errors) do
-          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+        case Map.has_key?(reason.changes.metadata, :errors) do
+          true -> render(conn, "error.json", error: reason.changes.metadata.errors)
           false -> render(conn, "error.json", error: reason.errors)
         end
     end
@@ -41,8 +41,8 @@ defmodule CollegeWeb.CourseController do
         json(conn, %{error: "not found"})
 
       {:error, reason} ->
-        case Map.has_key?(reason.changes.semester, :errors) do
-          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+        case Map.has_key?(reason.changes.metadata, :errors) do
+          true -> render(conn, "error.json", error: reason.changes.metadata.errors)
           false -> render(conn, "error.json", error: reason.errors)
         end
     end
