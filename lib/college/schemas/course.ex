@@ -17,7 +17,7 @@ defmodule College.Schemas.Course do
         third: Third,
         fourth: Fourth
       ],
-      on_type_not_found: :raise,
+      on_type_not_found: :changeset_error,
       on_replace: :update
 
     field :description, :string
@@ -31,20 +31,28 @@ defmodule College.Schemas.Course do
   end
 
   def changeset(courses, params \\ %{}) do
-    params = add_type_to_metadata(params)
+    params = get_polymorphic_type(params)
 
     courses
     |> cast(params, [:name, :code, :description, :teacher_id, :semester])
-    |> cast_polymorphic_embed(:metadata, required: true, message: "metatdata should be of type map")
+    |> cast_polymorphic_embed(:metadata,
+      required: true,
+      message: "metatdata should be of type map"
+    )
     |> validate_required([:name, :code, :teacher_id])
     |> foreign_key_constraint(:teacher)
     |> unique_constraint(:code, message: "this code has already been taken")
   end
 
-  def add_type_to_metadata(%{"semester" => semester, "metadata" => metadata} = params)
+  def get_polymorphic_type(%{"semester" => semester, "metadata" => metadata} = params)
       when is_map(metadata) do
     metadata = Map.merge(metadata, %{"__type__" => semester})
     Map.put(params, "metadata", metadata)
   end
+
+  # def get_polymorphic_type(%{"semester" => semester, "metadata" => metadata} = params) do
+  #   Map.put(params, "metadata", metadata)
+  # end
+
 
 end

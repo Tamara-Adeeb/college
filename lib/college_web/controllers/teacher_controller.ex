@@ -31,8 +31,10 @@ defmodule CollegeWeb.TeacherController do
         render(conn, "error.json", error: reason.errors)
 
       {:error, :course, reason, _} ->
-        case Map.has_key?(reason.changes.semester, :errors) do
-          true -> render(conn, "error.json", error: reason.changes.semester.errors)
+        with true <- Map.has_key?(reason.changes, :metadata),
+             true <- Map.has_key?(reason.changes.metadata, :errors) do
+          render(conn, "error.json", error: reason.changes.metadata.errors)
+        else
           false -> render(conn, "error.json", error: reason.errors)
         end
     end

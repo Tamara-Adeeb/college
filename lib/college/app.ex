@@ -103,11 +103,11 @@ defmodule College.App do
 
   def create_course_teacher(params) do
     Ecto.Multi.new()
-    |> Ecto.Multi.insert(:teacher, %Teacher{}|> Teacher.changeset(params))
-    |> Ecto.Multi.insert(:course , fn %{teacher: teacher} ->
+    |> Ecto.Multi.insert(:teacher, %Teacher{} |> Teacher.changeset(params))
+    |> Ecto.Multi.insert(:course, fn %{teacher: teacher} ->
       params = Map.put(params, "teacher_id", teacher.id)
       %Course{} |> Course.changeset(params)
-    end )
+    end)
     |> Repo.transaction()
 
     # Repo.transaction(fn ->
@@ -229,5 +229,6 @@ defmodule College.App do
   def update_semester(course) do
     metadata = Map.from_struct(course.metadata)
     Map.replace(course, :metadata, metadata)
+
   end
 end
