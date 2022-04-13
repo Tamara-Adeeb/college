@@ -102,15 +102,23 @@ defmodule College.App do
   end
 
   def create_course_teacher(params) do
-    Repo.transaction(fn ->
-      with {:ok, teacher} <- create_teacher(params),
-           params <- Map.put(params, "teacher_id", teacher.id),
-           {:ok, course} <- create_course(params) do
-        [course, teacher]
-      else
-        {:error, changeset} -> Repo.rollback(changeset)
-      end
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:teacher, %Teacher{} |> Teacher.changeset(params))
+    |> Ecto.Multi.insert(:course, fn %{teacher: teacher} ->
+      params = Map.put(params, "teacher_id", teacher.id)
+      %Course{} |> Course.changeset(params)
     end)
+    |> Repo.transaction()
+
+    # Repo.transaction(fn ->
+    #   with {:ok, teacher} <- create_teacher(params),
+    #        params <- Map.put(params, "teacher_id", teacher.id),
+    #        {:ok, course} <- create_course(params) do
+    #     [course, teacher]
+    #   else
+    #     {:error, changeset} -> Repo.rollback(changeset)
+    #   end
+    # end)
   end
 
   #####################################################################################
@@ -219,14 +227,8 @@ defmodule College.App do
   end
 
   def update_semester(course) do
-    semester = Map.from_struct(course.semester)
+    metadata = Map.from_struct(course.metadata)
+    Map.replace(course, :metadata, metadata)
 
-    name =
-      course.semester.__struct__
-      |> Module.split()
-      |> List.last()
-
-    semester = Map.put_new(semester, :name, name)
-    Map.replace(course, :semester, semester)
   end
 end
