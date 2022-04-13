@@ -4,7 +4,6 @@ defmodule CollegeWeb.CourseController do
   alias College.Repo
 
   def index(conn, params) do
-    infinite_cursor = App.all_courses(params)
     %{entries: entries, metadata: metadata} = App.all_courses(params)
     courses = Enum.map(entries, fn course ->  App.update_semester(course) end )
     render(conn, "index.json", infinite_cursor: %{entries: courses, metadata: metadata})
