@@ -31,7 +31,7 @@ defmodule College.Schemas.Course do
   end
 
   def changeset(courses, params \\ %{}) do
-    params = get_polymorphic_type(params)
+    params = put_polymorphic_type(params)
 
     courses
     |> cast(params, [:name, :code, :description, :teacher_id, :semester])
@@ -44,15 +44,9 @@ defmodule College.Schemas.Course do
     |> unique_constraint(:code, message: "this code has already been taken")
   end
 
-  def get_polymorphic_type(%{"semester" => semester, "metadata" => metadata} = params)
-      when is_map(metadata) do
-    metadata = Map.merge(metadata, %{"__type__" => semester})
+  defp put_polymorphic_type(%{"semester" => semester, "metadata" => metadata} = params)
+       when is_map(metadata) do
+    metadata = Map.put(metadata, "__type__", semester)
     Map.put(params, "metadata", metadata)
   end
-
-  # def get_polymorphic_type(%{"semester" => semester, "metadata" => metadata} = params) do
-  #   Map.put(params, "metadata", metadata)
-  # end
-
-
 end

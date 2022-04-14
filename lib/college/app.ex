@@ -80,6 +80,19 @@ defmodule College.App do
       limit: 3
     )
   end
+   #####################################################################################
+
+   def get_student(id) do
+     Repo.get(Student, id)
+   end
+
+   def get_teacher(id) do
+     Repo.get(Teacher, id)
+   end
+
+   def get_course(id) do
+     Repo.get(Course, id)
+   end
 
   #####################################################################################
 
@@ -226,9 +239,5 @@ defmodule College.App do
     end
   end
 
-  def update_semester(course) do
-    metadata = Map.from_struct(course.metadata)
-    Map.replace(course, :metadata, metadata)
-
-  end
+ 
 end

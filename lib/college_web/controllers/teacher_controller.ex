@@ -8,6 +8,13 @@ defmodule CollegeWeb.TeacherController do
     render(conn, "index.json", infinite_cursor: infinite_cursor)
   end
 
+  def show(conn, %{"id" => id}) do
+    case App.get_teacher(id) do
+      nil -> json(conn, %{error: "not found"})
+      teacher -> render(conn, "show.json", teacher: teacher)
+    end
+  end
+
   def create(conn, params) do
     case App.create_teacher(params) do
       {:ok, teacher} ->
@@ -15,28 +22,6 @@ defmodule CollegeWeb.TeacherController do
 
       {:error, reason} ->
         render(conn, "error.json", error: reason.errors)
-    end
-  end
-
-  def create_teaacher_with_course(conn, params) do
-    case App.create_course_teacher(params) do
-      # {:ok, [course, teacher]} ->
-      #   render(conn, "create.json", course_teacher: [course, teacher])
-
-      {:ok, %{course: course, teacher: teacher}} ->
-        course = App.update_semester(course)
-        render(conn, "create.json", course_teacher: [course, teacher])
-
-      {:error, :teacher, reason, _} ->
-        render(conn, "error.json", error: reason.errors)
-
-      {:error, :course, reason, _} ->
-        with true <- Map.has_key?(reason.changes, :metadata),
-             true <- Map.has_key?(reason.changes.metadata, :errors) do
-          render(conn, "error.json", error: reason.changes.metadata.errors)
-        else
-          false -> render(conn, "error.json", error: reason.errors)
-        end
     end
   end
 

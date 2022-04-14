@@ -3,16 +3,25 @@ defmodule CollegeWeb.StudentController do
   alias College.App
   alias College.Repo
 
-  def index(conn,params) do
+  def index(conn, params) do
     infinite_cursor = App.all_students(params)
     render(conn, "index.json", infinite_cursor: infinite_cursor)
+  end
+
+  def show(conn, %{"id" => id}) do
+    case App.get_student(id) do
+      nil -> json(conn, %{error: "not found"})
+      student -> render(conn, "show.json", student: student)
+    end
   end
 
   def create(conn, params) do
     case App.create_student(params) do
       {:ok, student} ->
         render(conn, "create.json", student: student |> Repo.preload(:courses))
-      {:error, reason} -> render(conn, "error.json",error: reason.errors)
+
+      {:error, reason} ->
+        render(conn, "error.json", error: reason.errors)
     end
   end
 
@@ -25,19 +34,21 @@ defmodule CollegeWeb.StudentController do
 
   def update(conn, params) do
     case App.update_student(params) do
-      {:ok, student} -> render(conn, "update.json", student: student )
-      {:error , "not found"} -> json(conn, %{error: "not found"})
-      {:error, reason} -> render(conn, "error.json",error: reason.errors)
+      {:ok, student} -> render(conn, "update.json", student: student)
+      {:error, "not found"} -> json(conn, %{error: "not found"})
+      {:error, reason} -> render(conn, "error.json", error: reason.errors)
     end
   end
 
   def register_course(conn, params) do
     case App.student_register_course(params) do
       {:ok, student_course} ->
-        student_course = student_course |> Repo.preload([:course,:student])
+        student_course = student_course |> Repo.preload([:course, :student])
         student = student_course.student |> Repo.preload(:courses)
         render(conn, "register_course.json", student: student)
-      {:error, reason} -> render(conn, "error.json",error: reason.errors)
+
+      {:error, reason} ->
+        render(conn, "error.json", error: reason.errors)
     end
   end
 
