@@ -31,7 +31,10 @@ defmodule College.Schemas.Course do
   end
 
   def changeset(courses, params \\ %{}) do
-    params = put_polymorphic_type(params)
+    params = case params["semester"] do
+      nil -> params
+      _ -> put_polymorphic_type(params)
+    end
 
     courses
     |> cast(params, [:name, :code, :description, :teacher_id, :semester])
