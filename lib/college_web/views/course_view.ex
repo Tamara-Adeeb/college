@@ -26,6 +26,18 @@ defmodule CollegeWeb.CourseView do
     }
   end
 
+  def render("create.json", %{course_teacher: data}) do
+    [course, teacher] = data
+
+    %{
+      status: "ok",
+      data: %{
+        teacher: render_one(teacher, TeacherView, "show.json"),
+        course: render_one(course, __MODULE__, "show.json")
+      }
+    }
+  end
+
   def render("delete.json", %{course: _course}) do
     %{status: "ok"}
   end
