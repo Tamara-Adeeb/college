@@ -17,6 +17,7 @@ defmodule CollegeWeb.Clinet do
 
   @impl CollegeWeb.PokemonBehaviour
   def get_http(url) do
+    IO.inspect(url)
     HTTPoison.get(url)
   end
 end
