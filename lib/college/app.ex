@@ -80,19 +80,20 @@ defmodule College.App do
       limit: 3
     )
   end
-   #####################################################################################
 
-   def get_student(id) do
-     Repo.get(Student, id)
-   end
+  #####################################################################################
 
-   def get_teacher(id) do
-     Repo.get(Teacher, id)
-   end
+  def get_student(id) do
+    Repo.get(Student, id)
+  end
 
-   def get_course(id) do
-     Repo.get(Course, id)
-   end
+  def get_teacher(id) do
+    Repo.get(Teacher, id)
+  end
+
+  def get_course(id) do
+    Repo.get(Course, id)
+  end
 
   #####################################################################################
 
@@ -122,16 +123,6 @@ defmodule College.App do
       %Course{} |> Course.changeset(params)
     end)
     |> Repo.transaction()
-
-    # Repo.transaction(fn ->
-    #   with {:ok, teacher} <- create_teacher(params),
-    #        params <- Map.put(params, "teacher_id", teacher.id),
-    #        {:ok, course} <- create_course(params) do
-    #     [course, teacher]
-    #   else
-    #     {:error, changeset} -> Repo.rollback(changeset)
-    #   end
-    # end)
   end
 
   #####################################################################################
@@ -238,6 +229,4 @@ defmodule College.App do
         {teacher, students}
     end
   end
-
- 
 end
