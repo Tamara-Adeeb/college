@@ -5,8 +5,6 @@ defmodule CollegeWeb.Factory do
   alias Faker.Date
   alias CollegeWeb.Clinet
 
-
-
   # without Ecto
   # def build(:student) do
   #   %Student{

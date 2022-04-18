@@ -187,7 +187,7 @@ defmodule College.App do
 
   def student_register_course(params) do
     %StudentsCourses{}
-    |> StudentsCourses.changeset_foreign(params)
+    |> StudentsCourses.changeset(params)
     |> Repo.insert()
   end
 
