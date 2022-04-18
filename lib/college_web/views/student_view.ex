@@ -55,8 +55,6 @@ defmodule CollegeWeb.StudentView do
   end
 
   def render("show_error.json", error) do
-    IO.inspect(error)
-
     {
       field,
       {text, validation}

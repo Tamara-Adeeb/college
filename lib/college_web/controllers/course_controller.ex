@@ -38,9 +38,6 @@ defmodule CollegeWeb.CourseController do
 
   def create_teaacher_with_course(conn, params) do
     case App.create_course_teacher(params) do
-      # {:ok, [course, teacher]} ->
-      #   render(conn, "create.json", course_teacher: [course, teacher])
-
       {:ok, %{course: course, teacher: teacher}} ->
         course = update_metadate(course)
         render(conn, "create.json", course_teacher: [course, teacher])

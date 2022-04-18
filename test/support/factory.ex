@@ -3,6 +3,7 @@ defmodule CollegeWeb.Factory do
   alias College.Schemas.Student
   alias College.Repo
   alias Faker.Date
+  alias CollegeWeb.Clinet
 
   # without Ecto
   # def build(:student) do
@@ -21,6 +22,10 @@ defmodule CollegeWeb.Factory do
       email: "test@gmail.com",
       date_of_birth: Date.date_of_birth()
     }
+  end
+
+  def get_response do
+    CollegeWeb.Clinet.get_pokemon(10, 0)
   end
 
   # def build(factory_name, attributes) do

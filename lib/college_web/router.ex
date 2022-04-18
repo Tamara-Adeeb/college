@@ -34,4 +34,9 @@ defmodule CollegeWeb.Router do
     resources "/courses", CourseController, only: [:create, :delete, :update, :index, :show]
     post "/courses/teachers", CourseController, :create_teaacher_with_course
   end
+  scope "/api/pokemons",  CollegeWeb do
+    pipe_through :api
+
+    get "/", PokemonController, :index
+  end
 end
