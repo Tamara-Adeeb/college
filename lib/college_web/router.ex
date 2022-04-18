@@ -22,11 +22,14 @@ defmodule CollegeWeb.Router do
     post "/session/refresh", SessionController, :refresh
     post "/session/delete", SessionController, :delete
 
-    resources "/students", StudentController, only: [:create, :delete, :update, :index, :show]
+    get "person/students/:id", PersonController, :get_student
+    get "person/teachers/:id", PersonController, :get_teacher
+
+    resources "/students", StudentController, only: [:create, :delete, :update, :index]
     post "/students/:student_id/courses/:course_id", StudentController, :register_course
     delete "/students/:student_id/courses/:course_id", StudentController, :cancel_register_course
 
-    resources "/teachers", TeacherController, only: [:create, :delete, :update, :index, :show]
+    resources "/teachers", TeacherController, only: [:create, :delete, :update, :index]
     get "/teachers/:id/courses", TeacherController, :all_courses_for_teacher
     get "/teachers/:id/students", TeacherController, :all_students_for_teacher
 

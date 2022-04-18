@@ -2,7 +2,7 @@ defmodule CollegeWeb.StudentView do
   use CollegeWeb, :view
   alias CollegeWeb.CourseView
   alias CollegeWeb.JsonViewHelper
-  @fields [:id, :first_name, :last_name, :email, :date_of_birth]
+  @fields [:id, :first_name, :last_name, :email, :date_of_birth, :gender, :address]
   @relationships [{:courses, CourseView, "show.json"}]
 
   def render("index.json", %{infinite_cursor: data}) do
