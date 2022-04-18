@@ -26,10 +26,6 @@ defmodule CollegeWeb.SessionController do
   end
 
   def refresh(conn, _params) do
-    IO.inspect(conn)
-    IO.inspect(Plug.Conn.fetch_cookies(conn))
-    IO.inspect(Plug.Conn.fetch_cookies(conn) |> Map.from_struct())
-
     refresh_token =
       Plug.Conn.fetch_cookies(conn) |> Map.from_struct() |> get_in([:cookies, "ruid"])
 

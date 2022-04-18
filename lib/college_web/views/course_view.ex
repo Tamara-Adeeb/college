@@ -61,8 +61,6 @@ defmodule CollegeWeb.CourseView do
   end
 
   def render("show_error.json", error) do
-    IO.inspect(error)
-
     {
       field,
       {text, validation}

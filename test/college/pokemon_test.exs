@@ -37,26 +37,10 @@ defmodule College.PokemonTest do
         {:ok, response} = pokemon_api.response
         {:ok, response}
       end)
-
-      assert Bound.get_pokemon(10, 0) ==
-               {:ok,
-                %{
-                  "count" => 1126,
-                  "next" => "https://pokeapi.co/api/v2/pokemon?offset=10&limit=10",
-                  "previous" => nil,
-                  "results" => [
-                    %{"name" => "bulbasaur", "url" => "https://pokeapi.co/api/v2/pokemon/1/"},
-                    %{"name" => "ivysaur", "url" => "https://pokeapi.co/api/v2/pokemon/2/"},
-                    %{"name" => "venusaur", "url" => "https://pokeapi.co/api/v2/pokemon/3/"},
-                    %{"name" => "charmander", "url" => "https://pokeapi.co/api/v2/pokemon/4/"},
-                    %{"name" => "charmeleon", "url" => "https://pokeapi.co/api/v2/pokemon/5/"},
-                    %{"name" => "charizard", "url" => "https://pokeapi.co/api/v2/pokemon/6/"},
-                    %{"name" => "squirtle", "url" => "https://pokeapi.co/api/v2/pokemon/7/"},
-                    %{"name" => "wartortle", "url" => "https://pokeapi.co/api/v2/pokemon/8/"},
-                    %{"name" => "blastoise", "url" => "https://pokeapi.co/api/v2/pokemon/9/"},
-                    %{"name" => "caterpie", "url" => "https://pokeapi.co/api/v2/pokemon/10/"}
-                  ]
-                }}
+      {:ok, response} = Bound.get_pokemon(10, 0)
+      first_result = List.first(response["results"])
+      assert Map.keys(response) == ["count", "next" , "previous", "results"]
+      assert Map.keys(first_result) == ["name" , "url"]
     end
   end
 
@@ -90,25 +74,18 @@ defmodule College.PokemonTest do
       assert length(response["results"]) == 10
       assert is_list(response["results"]) == true
 
-      assert Bound.get_pokemon(10, 0) ==
-               {:ok,
-                %{
-                  "count" => 1126,
-                  "next" => "https://pokeapi.co/api/v2/pokemon?offset=10&limit=10",
-                  "previous" => nil,
-                  "results" => [
-                    %{"name" => "bulbasaur", "url" => "https://pokeapi.co/api/v2/pokemon/1/"},
-                    %{"name" => "ivysaur", "url" => "https://pokeapi.co/api/v2/pokemon/2/"},
-                    %{"name" => "venusaur", "url" => "https://pokeapi.co/api/v2/pokemon/3/"},
-                    %{"name" => "charmander", "url" => "https://pokeapi.co/api/v2/pokemon/4/"},
-                    %{"name" => "charmeleon", "url" => "https://pokeapi.co/api/v2/pokemon/5/"},
-                    %{"name" => "charizard", "url" => "https://pokeapi.co/api/v2/pokemon/6/"},
-                    %{"name" => "squirtle", "url" => "https://pokeapi.co/api/v2/pokemon/7/"},
-                    %{"name" => "wartortle", "url" => "https://pokeapi.co/api/v2/pokemon/8/"},
-                    %{"name" => "blastoise", "url" => "https://pokeapi.co/api/v2/pokemon/9/"},
-                    %{"name" => "caterpie", "url" => "https://pokeapi.co/api/v2/pokemon/10/"}
-                  ]
-                }}
+      assert response["results"] == [
+               %{"name" => "bulbasaur", "url" => "https://pokeapi.co/api/v2/pokemon/1/"},
+               %{"name" => "ivysaur", "url" => "https://pokeapi.co/api/v2/pokemon/2/"},
+               %{"name" => "venusaur", "url" => "https://pokeapi.co/api/v2/pokemon/3/"},
+               %{"name" => "charmander", "url" => "https://pokeapi.co/api/v2/pokemon/4/"},
+               %{"name" => "charmeleon", "url" => "https://pokeapi.co/api/v2/pokemon/5/"},
+               %{"name" => "charizard", "url" => "https://pokeapi.co/api/v2/pokemon/6/"},
+               %{"name" => "squirtle", "url" => "https://pokeapi.co/api/v2/pokemon/7/"},
+               %{"name" => "wartortle", "url" => "https://pokeapi.co/api/v2/pokemon/8/"},
+               %{"name" => "blastoise", "url" => "https://pokeapi.co/api/v2/pokemon/9/"},
+               %{"name" => "caterpie", "url" => "https://pokeapi.co/api/v2/pokemon/10/"}
+             ]
     end
   end
 end
