@@ -1,3 +1,3 @@
 defprotocol College.Person do
-  def get(args)
+  def get(args, id)
 end

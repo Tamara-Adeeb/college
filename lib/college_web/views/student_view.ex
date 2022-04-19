@@ -19,7 +19,7 @@ defmodule CollegeWeb.StudentView do
   end
 
   def render("create.json", %{student: student}) do
-    %{status: "ok", data: render_one(student, __MODULE__, "show_relation.json")}
+    %{data: render_one(student, __MODULE__, "show_relation.json")}
   end
 
   def render("delete.json", %{student: _student}) do
@@ -27,15 +27,14 @@ defmodule CollegeWeb.StudentView do
   end
 
   def render("update.json", %{student: student}) do
-    %{status: "ok", data: render_one(student, __MODULE__, "show.json")}
+    %{data: render_one(student, __MODULE__, "show.json")}
   end
 
-  def render("register_course.json", %{student: student}) do
+  def render("register_course.json", %{student_course: {student , course}}) do
     %{
-      status: "ok",
       data: %{
         student: render_one(student, __MODULE__, "show.json"),
-        courses: render_many(student.courses, CourseView, "show.json")
+        courses: render_one(course, CourseView, "show.json")
       }
     }
   end
