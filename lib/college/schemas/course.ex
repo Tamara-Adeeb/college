@@ -8,6 +8,10 @@ defmodule College.Schemas.Course do
   schema "courses" do
     field :name, :string
     field :code, :string
+    field :faculty, Ecto.Enum, values: [:history, :engineering, :art, :science, :law]
+
+    field :branch, :string
+
     field :semester, Ecto.Enum, values: [:first, :second, :third, :fourth], null: false
 
     field :metadata, PolymorphicEmbed,
@@ -31,18 +35,20 @@ defmodule College.Schemas.Course do
   end
 
   def changeset(courses, params \\ %{}) do
-    params = case params["semester"] do
-      nil -> params
-      _ -> put_polymorphic_type(params)
-    end
+    params =
+      case params["semester"] do
+        nil -> params
+        _ -> put_polymorphic_type(params)
+      end
 
     courses
-    |> cast(params, [:name, :code, :description, :teacher_id, :semester])
+    |> cast(params, [:name, :code, :description, :teacher_id, :semester, :faculty, :branch])
     |> cast_polymorphic_embed(:metadata,
       required: true,
       message: "metatdata should be of type map"
     )
-    |> validate_required([:name, :code, :teacher_id])
+    |> validate_required([:name, :code, :teacher_id, :faculty])
+    |> changeset_branch()
     |> foreign_key_constraint(:teacher)
     |> unique_constraint(:code, message: "this code has already been taken")
   end
@@ -51,5 +57,51 @@ defmodule College.Schemas.Course do
        when is_map(metadata) do
     metadata = Map.put(metadata, "__type__", semester)
     Map.put(params, "metadata", metadata)
+  end
+
+  defp changeset_branch(changeset) do
+    case get_field(changeset, :faculty) do
+      :engineering ->
+        validate_inclusion(changeset, :branch, [
+          "civil",
+          "chemical",
+          "mechanical",
+          "electrical",
+          "industrial",
+          "computer"
+        ])
+        |> validate_required(:branch, message: "branch field is required for engineering faculty")
+
+      :history ->
+        validate_inclusion(changeset, :branch, [
+          nil
+        ])
+
+      :law ->
+        validate_inclusion(changeset, :branch, [
+          nil
+        ])
+
+      :art ->
+        validate_inclusion(changeset, :branch, [
+          "creative",
+          "arts",
+          "writing",
+          "philosophy",
+          "humanities"
+        ])
+        |> validate_required(:branch, message: "branch field is required for art faculty")
+
+      :science ->
+        validate_inclusion(changeset, :branch, [
+          "physics",
+          "biology",
+          "chemistry",
+          "math",
+          "anatomy",
+          "statistics"
+        ])
+        |> validate_required(:branch, message: "branch field is required for science faculty")
+    end
   end
 end
