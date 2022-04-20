@@ -4,7 +4,6 @@ defmodule College.Schemas.Course do
   import Ecto.Changeset
   import PolymorphicEmbed, only: [cast_polymorphic_embed: 3]
 
-  @derive {Jason.Encoder, only: [:name, :code, :semester, :description, :teacher, :students]}
   schema "courses" do
     field :name, :string
     field :code, :string

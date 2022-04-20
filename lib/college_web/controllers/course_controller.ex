@@ -21,6 +21,8 @@ defmodule CollegeWeb.CourseController do
   end
 
   def create(conn, params) do
+    params = Map.put(params, "branch", String.downcase(params["branch"]))
+
     case App.create_course(params) do
       {:ok, course} ->
         course = update_metadate(course)
