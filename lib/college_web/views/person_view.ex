@@ -16,6 +16,11 @@ defmodule CollegeWeb.PersonView do
   ]
 
   def render("show.json",%{data: data}) do
-    JsonViewHelper.render_json(data, StudentView, @fields)
+    %{
+      gender: data.gender,
+      address: data.address,
+      number_of_courses: data.number_of_courses
+    }
+
   end
 end
