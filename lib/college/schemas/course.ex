@@ -47,7 +47,7 @@ defmodule College.Schemas.Course do
       message: "metatdata should be of type map"
     )
     |> validate_required([:name, :code, :teacher_id, :faculty])
-    |> changeset_branch(params)
+    |> validate_cast_branch(params)
     |> foreign_key_constraint(:teacher)
     |> unique_constraint(:code, message: "this code has already been taken")
   end
@@ -58,7 +58,7 @@ defmodule College.Schemas.Course do
     Map.put(params, "metadata", metadata)
   end
 
-  defp changeset_branch(changeset, params) do
+  defp validate_cast_branch(changeset, params) do
     case get_field(changeset, :faculty) do
       :engineering ->
         validate_inclusion(changeset, :branch, [
