@@ -3,6 +3,7 @@ defmodule College.Schemas.Course do
   use Ecto.Schema
   import Ecto.Changeset
   import PolymorphicEmbed, only: [cast_polymorphic_embed: 3]
+
   @engineering_branches [
     "civil",
     "chemical",
@@ -12,22 +13,9 @@ defmodule College.Schemas.Course do
     "computer"
   ]
 
-  @art_branches [
-    "creative",
-    "arts",
-    "writing",
-    "philosophy",
-    "humanities"
-  ]
+  @art_branches ["creative", "arts", "writing", "philosophy", "humanities"]
 
-  @science_branches [
-    "physics",
-    "biology",
-    "chemistry",
-    "math",
-    "anatomy",
-    "statistics"
-  ]
+  @science_branches ["physics", "biology", "chemistry", "math", "anatomy", "statistics"]
 
   schema "courses" do
     field :name, :string
@@ -102,7 +90,9 @@ defmodule College.Schemas.Course do
         |> cast(params, [:branch])
         |> validate_inclusion(:branch, @science_branches)
         |> validate_required(:branch, message: "branch field is required for science faculty")
-      _ -> changeset
+
+      _ ->
+        changeset
     end
   end
 end

@@ -28,13 +28,12 @@ end
 
 for _ <- 1..10 do
   App.create_course(%{
-    "name" => Lorem.word,
+    "name" => Lorem.word(),
     "code" => Code.isbn(),
     "semester" => Nato.digit_code_word(),
     "description" => Lorem.paragraph(1..2),
     "teacher_id" => Enum.random(1..8)
   })
-
 end
 
 for _ <- 1..10 do
@@ -49,7 +48,7 @@ for _ <- 1..5 do
     "first_name" => Person.first_name(),
     "last_name" => Person.last_name(),
     "email" => Internet.email(),
-    "name" => Lorem.word,
+    "name" => Lorem.word(),
     "code" => Code.isbn(),
     "semester" => Nato.digit_code_word(),
     "description" => Lorem.paragraph(1..2)

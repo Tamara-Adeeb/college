@@ -17,8 +17,7 @@ defmodule CollegeWeb.Router do
   end
 
   scope "/api", CollegeWeb do
-    # [:api, :auth]
-    pipe_through :api
+    pipe_through [:api, :auth]
 
     post "/session/refresh", SessionController, :refresh
     post "/session/delete", SessionController, :delete
@@ -34,7 +33,8 @@ defmodule CollegeWeb.Router do
     resources "/courses", CourseController, only: [:create, :delete, :update, :index, :show]
     post "/courses/teachers", CourseController, :create_teaacher_with_course
   end
-  scope "/api/pokemons",  CollegeWeb do
+
+  scope "/api/pokemons", CollegeWeb do
     pipe_through :api
 
     get "/", PokemonController, :index

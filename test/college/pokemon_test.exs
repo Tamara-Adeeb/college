@@ -37,10 +37,11 @@ defmodule College.PokemonTest do
         {:ok, response} = pokemon_api.response
         {:ok, response}
       end)
+
       {:ok, response} = Bound.get_pokemon(10, 0)
       first_result = List.first(response["results"])
-      assert Map.keys(response) == ["count", "next" , "previous", "results"]
-      assert Map.keys(first_result) == ["name" , "url"]
+      assert Map.keys(response) == ["count", "next", "previous", "results"]
+      assert Map.keys(first_result) == ["name", "url"]
     end
   end
 

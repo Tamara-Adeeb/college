@@ -32,8 +32,4 @@ defmodule College.Schemas.User do
       put_change(user, :password, encrypted_password)
     end
   end
-
-  # defp downcase_username(changeset) do
-  #   update_change(changeset, :username, &String.downcase/1)
-  # end
 end
