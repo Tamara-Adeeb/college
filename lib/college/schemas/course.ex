@@ -3,6 +3,31 @@ defmodule College.Schemas.Course do
   use Ecto.Schema
   import Ecto.Changeset
   import PolymorphicEmbed, only: [cast_polymorphic_embed: 3]
+  @engineering_branches [
+    "civil",
+    "chemical",
+    "mechanical",
+    "electrical",
+    "industrial",
+    "computer"
+  ]
+
+  @art_branches [
+    "creative",
+    "arts",
+    "writing",
+    "philosophy",
+    "humanities"
+  ]
+
+  @science_branches [
+    "physics",
+    "biology",
+    "chemistry",
+    "math",
+    "anatomy",
+    "statistics"
+  ]
 
   schema "courses" do
     field :name, :string
@@ -47,7 +72,7 @@ defmodule College.Schemas.Course do
       message: "metatdata should be of type map"
     )
     |> validate_required([:name, :code, :teacher_id, :faculty])
-    |> validate_cast_branch(params)
+    |> maybe_cast_branch(params)
     |> foreign_key_constraint(:teacher)
     |> unique_constraint(:code, message: "this code has already been taken")
   end
@@ -58,48 +83,26 @@ defmodule College.Schemas.Course do
     Map.put(params, "metadata", metadata)
   end
 
-  defp validate_cast_branch(changeset, params) do
+  defp maybe_cast_branch(changeset, params) do
     case get_field(changeset, :faculty) do
       :engineering ->
-        cast(changeset, params, [:branch])
-        |> validate_inclusion(:branch, [
-          "civil",
-          "chemical",
-          "mechanical",
-          "electrical",
-          "industrial",
-          "computer"
-        ])
+        changeset
+        |> cast(params, [:branch])
+        |> validate_inclusion(:branch, @engineering_branches)
         |> validate_required(:branch, message: "branch field is required for engineering faculty")
 
-      :history ->
-        changeset
-
-      :law ->
-        changeset
-
       :art ->
-        cast(changeset, params, [:branch])
-        |> validate_inclusion(:branch, [
-          "creative",
-          "arts",
-          "writing",
-          "philosophy",
-          "humanities"
-        ])
+        changeset
+        |> cast(params, [:branch])
+        |> validate_inclusion(:branch, @art_branches)
         |> validate_required(:branch, message: "branch field is required for art faculty")
 
       :science ->
-        cast(changeset, params, [:branch])
-        |> validate_inclusion(:branch, [
-          "physics",
-          "biology",
-          "chemistry",
-          "math",
-          "anatomy",
-          "statistics"
-        ])
+        changeset
+        |> cast(params, [:branch])
+        |> validate_inclusion(:branch, @science_branches)
         |> validate_required(:branch, message: "branch field is required for science faculty")
+      _ -> changeset
     end
   end
 end
