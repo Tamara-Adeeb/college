@@ -41,13 +41,13 @@ defmodule College.Schemas.Course do
       end
 
     courses
-    |> cast(params, [:name, :code, :description, :teacher_id, :semester, :faculty, :branch])
+    |> cast(params, [:name, :code, :description, :teacher_id, :semester, :faculty])
     |> cast_polymorphic_embed(:metadata,
       required: true,
       message: "metatdata should be of type map"
     )
     |> validate_required([:name, :code, :teacher_id, :faculty])
-    |> changeset_branch()
+    |> changeset_branch(params)
     |> foreign_key_constraint(:teacher)
     |> unique_constraint(:code, message: "this code has already been taken")
   end
@@ -58,7 +58,7 @@ defmodule College.Schemas.Course do
     Map.put(params, "metadata", metadata)
   end
 
-  defp changeset_branch(changeset) do
+  defp changeset_branch(changeset, params) do
     case get_field(changeset, :faculty) do
       :engineering ->
         validate_inclusion(changeset, :branch, [
@@ -69,17 +69,14 @@ defmodule College.Schemas.Course do
           "industrial",
           "computer"
         ])
+        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for engineering faculty")
 
       :history ->
-        validate_inclusion(changeset, :branch, [
-          nil
-        ])
+        changeset
 
       :law ->
-        validate_inclusion(changeset, :branch, [
-          nil
-        ])
+        changeset
 
       :art ->
         validate_inclusion(changeset, :branch, [
@@ -89,6 +86,7 @@ defmodule College.Schemas.Course do
           "philosophy",
           "humanities"
         ])
+        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for art faculty")
 
       :science ->
@@ -100,6 +98,7 @@ defmodule College.Schemas.Course do
           "anatomy",
           "statistics"
         ])
+        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for science faculty")
     end
   end
