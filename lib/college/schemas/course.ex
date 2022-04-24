@@ -61,7 +61,8 @@ defmodule College.Schemas.Course do
   defp validate_cast_branch(changeset, params) do
     case get_field(changeset, :faculty) do
       :engineering ->
-        validate_inclusion(changeset, :branch, [
+        cast(changeset, params, [:branch])
+        |> validate_inclusion(:branch, [
           "civil",
           "chemical",
           "mechanical",
@@ -69,7 +70,6 @@ defmodule College.Schemas.Course do
           "industrial",
           "computer"
         ])
-        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for engineering faculty")
 
       :history ->
@@ -79,18 +79,19 @@ defmodule College.Schemas.Course do
         changeset
 
       :art ->
-        validate_inclusion(changeset, :branch, [
+        cast(changeset, params, [:branch])
+        |> validate_inclusion(:branch, [
           "creative",
           "arts",
           "writing",
           "philosophy",
           "humanities"
         ])
-        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for art faculty")
 
       :science ->
-        validate_inclusion(changeset, :branch, [
+        cast(changeset, params, [:branch])
+        |> validate_inclusion(:branch, [
           "physics",
           "biology",
           "chemistry",
@@ -98,7 +99,6 @@ defmodule College.Schemas.Course do
           "anatomy",
           "statistics"
         ])
-        |> cast(params, [:branch])
         |> validate_required(:branch, message: "branch field is required for science faculty")
     end
   end
