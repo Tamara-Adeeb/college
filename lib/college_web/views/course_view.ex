@@ -4,7 +4,6 @@ defmodule CollegeWeb.CourseView do
   alias CollegeWeb.TeacherView
   alias CollegeWeb.JsonViewHelper
 
-
   def render("index.json", %{infinite_cursor: data}) do
     %{entries: entries, metadata: metadata} = data
 
