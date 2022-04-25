@@ -13,6 +13,8 @@ defmodule College.Repo.Migrations.Initial do
     create table(:students) do
       add :first_name, :string, null: false
       add :last_name, :string
+      add :gender, :string
+      add :address, :string
       add :email, :string, null: false
       add :date_of_birth, :date, null: false
       timestamps()
@@ -25,6 +27,9 @@ defmodule College.Repo.Migrations.Initial do
       add :first_name, :string, null: false
       add :last_name, :string
       add :email, :string, null: false
+      add :gender, :string
+      add :address, :string
+      add :date_of_birth, :date
       timestamps()
     end
 

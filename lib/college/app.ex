@@ -39,194 +39,194 @@ defmodule College.App do
   end
 
   #####################################################################################
-  def all_students(params) do
-    query =
-      from s in Student,
-        order_by: [asc: s.inserted_at, asc: s.id]
+  # def all_students(params) do
+  #   query =
+  #     from s in Student,
+  #       order_by: [asc: s.inserted_at, asc: s.id]
 
-    Repo.paginate(query,
-      before: params["before"],
-      after: params["after"],
-      cursor_fields: [:inserted_at, :id],
-      include_total_count: true,
-      limit: 3
-    )
-  end
+  #   Repo.paginate(query,
+  #     before: params["before"],
+  #     after: params["after"],
+  #     cursor_fields: [:inserted_at, :id],
+  #     include_total_count: true,
+  #     limit: 3
+  #   )
+  # end
 
-  def all_teachers(params) do
-    query =
-      from t in Teacher,
-        order_by: [asc: t.inserted_at, asc: t.id]
+  # def all_teachers(params) do
+  #   query =
+  #     from t in Teacher,
+  #       order_by: [asc: t.inserted_at, asc: t.id]
 
-    Repo.paginate(query,
-      before: params["before"],
-      after: params["after"],
-      cursor_fields: [:inserted_at, :id],
-      include_total_count: true,
-      limit: 3
-    )
-  end
+  #   Repo.paginate(query,
+  #     before: params["before"],
+  #     after: params["after"],
+  #     cursor_fields: [:inserted_at, :id],
+  #     include_total_count: true,
+  #     limit: 3
+  #   )
+  # end
 
-  def all_courses(params) do
-    query =
-      from c in Course,
-        order_by: [asc: c.inserted_at, asc: c.id]
+  # def all_courses(params) do
+  #   query =
+  #     from c in Course,
+  #       order_by: [asc: c.inserted_at, asc: c.id]
 
-    Repo.paginate(query,
-      before: params["before"],
-      after: params["after"],
-      cursor_fields: [:inserted_at, :id],
-      include_total_count: true,
-      limit: 3
-    )
-  end
-
-  #####################################################################################
-
-  def get_student(id) do
-    Repo.get(Student, id)
-  end
-
-  def get_teacher(id) do
-    Repo.get(Teacher, id)
-  end
-
-  def get_course(id) do
-    Repo.get(Course, id)
-  end
+  #   Repo.paginate(query,
+  #     before: params["before"],
+  #     after: params["after"],
+  #     cursor_fields: [:inserted_at, :id],
+  #     include_total_count: true,
+  #     limit: 3
+  #   )
+  # end
 
   #####################################################################################
 
-  def create_student(params) do
-    %Student{}
-    |> Student.changeset(params)
-    |> Repo.insert()
-  end
+  # def get_student(id) do
+  #   Repo.get(Student, id)
+  # end
 
-  def create_teacher(params) do
-    %Teacher{}
-    |> Teacher.changeset(params)
-    |> Repo.insert()
-  end
+  # def get_teacher(id) do
+  #   Repo.get(Teacher, id)
+  # end
 
-  def create_course(params) do
-    %Course{}
-    |> Course.changeset(params)
-    |> Repo.insert()
-  end
-
-  def create_course_teacher(params) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:teacher, %Teacher{} |> Teacher.changeset(params))
-    |> Ecto.Multi.insert(:course, fn %{teacher: teacher} ->
-      params = Map.put(params, "teacher_id", teacher.id)
-      %Course{} |> Course.changeset(params)
-    end)
-    |> Repo.transaction()
-  end
-
-  #####################################################################################
-  def delete_student(id) do
-    case Repo.get(Student, id) do
-      nil -> {:error, "not found"}
-      student -> Repo.delete(student)
-    end
-  end
-
-  def delete_teacher(id) do
-    case Repo.get(Teacher, id) do
-      nil -> {:error, "not found"}
-      teacher -> Repo.delete(teacher)
-    end
-  end
-
-  def delete_course(id) do
-    case Repo.get(Course, id) do
-      nil -> {:error, "not found"}
-      course -> Repo.delete(course)
-    end
-  end
+  # def get_course(id) do
+  #   Repo.get(Course, id)
+  # end
 
   #####################################################################################
 
-  def update_student(params) do
-    case Repo.get(Student, params["id"]) do
-      nil ->
-        {:error, "not found"}
+  # def create_student(params) do
+  #   %Student{}
+  #   |> Student.changeset(params)
+  #   |> Repo.insert()
+  # end
 
-      student ->
-        student
-        |> Student.changeset(params)
-        |> Repo.update()
-    end
-  end
+  # def create_teacher(params) do
+  #   %Teacher{}
+  #   |> Teacher.changeset(params)
+  #   |> Repo.insert()
+  # end
 
-  def update_teacher(params) do
-    case Repo.get(Teacher, params["id"]) do
-      nil ->
-        {:error, "not found"}
+  # def create_course(params) do
+  #   %Course{}
+  #   |> Course.changeset(params)
+  #   |> Repo.insert()
+  # end
 
-      teacher ->
-        teacher
-        |> Teacher.changeset(params)
-        |> Repo.update()
-    end
-  end
+  # def create_course_teacher(params) do
+  #   Ecto.Multi.new()
+  #   |> Ecto.Multi.insert(:teacher, %Teacher{} |> Teacher.changeset(params))
+  #   |> Ecto.Multi.insert(:course, fn %{teacher: teacher} ->
+  #     params = Map.put(params, "teacher_id", teacher.id)
+  #     %Course{} |> Course.changeset(params)
+  #   end)
+  #   |> Repo.transaction()
+  # end
 
-  def update_course(params) do
-    case Repo.get(Course, params["id"]) do
-      nil ->
-        {:error, "not found"}
+  #####################################################################################
+  # def delete_student(id) do
+  #   case Repo.get(Student, id) do
+  #     nil -> {:error, "not found"}
+  #     student -> Repo.delete(student)
+  #   end
+  # end
 
-      course ->
-        course
-        |> Course.changeset(params)
-        |> Repo.update()
-    end
-  end
+  # def delete_teacher(id) do
+  #   case Repo.get(Teacher, id) do
+  #     nil -> {:error, "not found"}
+  #     teacher -> Repo.delete(teacher)
+  #   end
+  # end
 
-  def student_register_course(params) do
-    %StudentsCourses{}
-    |> StudentsCourses.changeset(params)
-    |> Repo.insert()
-  end
+  # def delete_course(id) do
+  #   case Repo.get(Course, id) do
+  #     nil -> {:error, "not found"}
+  #     course -> Repo.delete(course)
+  #   end
+  # end
 
-  def cancel_register_course(student_id, course_id) do
-    query =
-      from sc in StudentsCourses,
-        where: sc.student_id == ^student_id and sc.course_id == ^course_id
+  #####################################################################################
 
-    case Repo.one(query) do
-      nil -> {:error, "not found"}
-      result -> Repo.delete(result)
-    end
-  end
+  # def update_student(params) do
+  #   case Repo.get(Student, params["id"]) do
+  #     nil ->
+  #       {:error, "not found"}
 
-  def get_courses_for_teacher(id) do
-    case Repo.get(Teacher, id) do
-      nil ->
-        {:error, "not found"}
+  #     student ->
+  #       student
+  #       |> Student.changeset(params)
+  #       |> Repo.update()
+  #   end
+  # end
 
-      teacher ->
-        {:ok, teacher |> Repo.preload(:courses)}
-    end
-  end
+  # def update_teacher(params) do
+  #   case Repo.get(Teacher, params["id"]) do
+  #     nil ->
+  #       {:error, "not found"}
 
-  def get_students_for_teacher(id) do
-    case Repo.get(Teacher, id) do
-      nil ->
-        {:error, "not found"}
+  #     teacher ->
+  #       teacher
+  #       |> Teacher.changeset(params)
+  #       |> Repo.update()
+  #   end
+  # end
 
-      teacher ->
-        teacher = teacher |> Repo.preload(:courses)
-        courses = teacher.courses |> Repo.preload(:students)
+  # def update_course(params) do
+  #   case Repo.get(Course, params["id"]) do
+  #     nil ->
+  #       {:error, "not found"}
 
-        students =
-          Enum.flat_map(courses, fn course ->
-            course.students
-          end)
+  #     course ->
+  #       course
+  #       |> Course.changeset(params)
+  #       |> Repo.update()
+  #   end
+  # end
 
-        {teacher, students}
-    end
-  end
+  # def student_register_course(params) do
+  #   %StudentsCourses{}
+  #   |> StudentsCourses.changeset(params)
+  #   |> Repo.insert()
+  # end
+
+  # def cancel_register_course(student_id, course_id) do
+  #   query =
+  #     from sc in StudentsCourses,
+  #       where: sc.student_id == ^student_id and sc.course_id == ^course_id
+
+  #   case Repo.one(query) do
+  #     nil -> {:error, "not found"}
+  #     result -> Repo.delete(result)
+  #   end
+  # end
+
+  # def get_courses_for_teacher(id) do
+  #   case Repo.get(Teacher, id) do
+  #     nil ->
+  #       {:error, "not found"}
+
+  #     teacher ->
+  #       {:ok, teacher |> Repo.preload(:courses)}
+  #   end
+  # end
+
+  # def get_students_for_teacher(id) do
+  #   case Repo.get(Teacher, id) do
+  #     nil ->
+  #       {:error, "not found"}
+
+  #     teacher ->
+  #       teacher = teacher |> Repo.preload(:courses)
+  #       courses = teacher.courses |> Repo.preload(:students)
+
+  #       students =
+  #         Enum.flat_map(courses, fn course ->
+  #           course.students
+  #         end)
+
+  #       {teacher, students}
+  #   end
+  # end
 end

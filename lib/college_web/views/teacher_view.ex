@@ -3,7 +3,7 @@ defmodule CollegeWeb.TeacherView do
   alias CollegeWeb.CourseView
   alias CollegeWeb.StudentView
   alias CollegeWeb.JsonViewHelper
-  @fields [:id, :first_name, :last_name, :email]
+  @fields [:id, :first_name, :last_name, :email, :date_of_birth, :gender, :address]
   @relationships [{:courses, CourseView, "show.json"}]
 
   def render("index.json", %{infinite_cursor: data}) do
@@ -20,27 +20,24 @@ defmodule CollegeWeb.TeacherView do
   end
 
   def render("create.json", %{teacher: teacher}) do
-    %{status: "ok", data: render_one(teacher, __MODULE__, "show_relation.json")}
+    %{ data: render_one(teacher, __MODULE__, "show_relation.json")}
   end
 
   def render("update.json", %{teacher: teacher}) do
     %{status: "ok", data: render_one(teacher, __MODULE__, "show_relation.json")}
   end
 
-  def render("list_of_courses.json", %{teacher: teacher}) do
+  def render("list_of_courses.json", %{courses: courses}) do
     %{
-      status: "ok",
       data: %{
-        teacher: render_one(teacher, __MODULE__, "show_relation.json")
+        courses: render_many(courses,CourseView, "show.json")
       }
     }
   end
 
-  def render("list_of_students.json", %{data: {teacher, students}}) do
+  def render("list_of_students.json", %{students: students}) do
     %{
-      status: "ok",
       data: %{
-        teacher: render_one(teacher, __MODULE__, "show.json"),
         students: render_many(students, StudentView, "show.json")
       }
     }
