@@ -5,11 +5,11 @@ defmodule College.Authentication.ErrorHandler do
 
   @impl Guardian.Plug.ErrorHandler
 
-  def auth_error(conn, {type,_reason}, _opts) do
+  def auth_error(conn, {type, _reason}, _opts) do
     body = Jason.encode!(%{error: to_string(type)})
-    conn
-    |>put_resp_content_type("application/json")
-    |> send_resp(401,body)
-  end
 
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(401, body)
+  end
 end

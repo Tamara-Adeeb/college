@@ -3,8 +3,8 @@ defmodule College.Schemas.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :username, :string
-    field :password, :string
+    field(:username, :string)
+    field(:password, :string)
     timestamps()
   end
 

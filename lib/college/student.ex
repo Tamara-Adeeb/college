@@ -5,8 +5,9 @@ defmodule College.Student do
 
   def all_students(params) do
     query =
-      from s in Student,
+      from(s in Student,
         order_by: [asc: s.inserted_at, asc: s.id]
+      )
 
     Repo.paginate(query,
       before: params["before"],
@@ -54,8 +55,9 @@ defmodule College.Student do
 
   def cancel_register_course(student_id, course_id) do
     query =
-      from sc in StudentsCourses,
+      from(sc in StudentsCourses,
         where: sc.student_id == ^student_id and sc.course_id == ^course_id
+      )
 
     case Repo.one(query) do
       nil -> {:error, "not found"}

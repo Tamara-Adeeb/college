@@ -1,6 +1,6 @@
 defmodule CollegeWeb.TeacherController do
   use CollegeWeb, :controller
-  alias College.{Teacher , Course}
+  alias College.{Teacher, Course}
   alias College.Repo
 
   def index(conn, params) do
@@ -45,7 +45,9 @@ defmodule CollegeWeb.TeacherController do
       {:ok, courses} ->
         courses = Enum.map(courses, fn course -> Course.update_metadate(course) end)
         render(conn, "list_of_courses.json", courses: courses)
-      {:error, _} -> json(conn, %{error: "Teacher not found"})
+
+      {:error, _} ->
+        json(conn, %{error: "Teacher not found"})
     end
   end
 
@@ -55,6 +57,4 @@ defmodule CollegeWeb.TeacherController do
       students -> render(conn, "list_of_students.json", students: students)
     end
   end
-
-
 end

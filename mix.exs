@@ -20,7 +20,7 @@ defmodule College.MixProject do
   def application do
     [
       mod: {College.Application, []},
-      extra_applications: [:logger, :runtime_tools,:httpoison]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 

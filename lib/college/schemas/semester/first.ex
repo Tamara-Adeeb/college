@@ -5,8 +5,8 @@ defmodule College.Schemas.Semester.First do
   @primary_key false
 
   embedded_schema do
-    field :period, :string
-    field :is_optional, :boolean
+    field(:period, :string)
+    field(:is_optional, :boolean)
   end
 
   def changeset(first, params) do

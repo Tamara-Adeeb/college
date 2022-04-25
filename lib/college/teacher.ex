@@ -5,8 +5,9 @@ defmodule College.Teacher do
 
   def all_teachers(params) do
     query =
-      from t in Teacher,
+      from(t in Teacher,
         order_by: [asc: t.inserted_at, asc: t.id]
+      )
 
     Repo.paginate(query,
       before: params["before"],
