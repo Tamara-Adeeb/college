@@ -27,8 +27,6 @@ defmodule CollegeWeb.Clinet do
   def create_student(body) do
     {:ok, body} = Poison.encode(body)
     headers = [{"Content-type", "application/json"}]
-    IO.inspect(body)
-
     with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <-
            Request.post_http("http://localhost:4000/api/students/", body, headers) do
       Jason.decode(body)

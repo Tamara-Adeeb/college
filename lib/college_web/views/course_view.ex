@@ -3,8 +3,6 @@ defmodule CollegeWeb.CourseView do
   alias CollegeWeb.StudentView
   alias CollegeWeb.TeacherView
   alias CollegeWeb.JsonViewHelper
-  @fields [:id, :name, :code, :semester, :description, :teacher_id, :metadata, :faculty, :branch]
-  @relationships [{:students, StudentView, "show.json"}, {:teacher, TeacherView, "show.json"}]
 
   def render("index.json", %{infinite_cursor: data}) do
     %{entries: entries, metadata: metadata} = data
@@ -41,15 +39,19 @@ defmodule CollegeWeb.CourseView do
   end
 
   def render("update.json", %{course: course}) do
-    %{data: render_one(course, __MODULE__, "show_relation.json")}
+    %{data: render_one(course, __MODULE__, "show.json")}
   end
 
   def render("show.json", %{course: course}) do
-    JsonViewHelper.render_json(course, __MODULE__, @fields)
-  end
-
-  def render("show_relation.json", %{course: course}) do
-    JsonViewHelper.render_json(course, __MODULE__, @fields, @relationships)
+    %{
+      id: course.id,
+      name: course.name,
+      code: course.code,
+      semester: course.semester,
+      description: course.description,
+      teacher_id: course.teacher_id,
+      metadata: course.metadata
+    }
   end
 
   def render("error.json", %{error: error}) do
