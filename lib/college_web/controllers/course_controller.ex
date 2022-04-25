@@ -1,16 +1,16 @@
 defmodule CollegeWeb.CourseController do
   use CollegeWeb, :controller
-  alias College.App
+  alias College.Course
   alias College.Repo
 
   def index(conn, params) do
-    %{entries: entries, metadata: metadata} = App.all_courses(params)
+    %{entries: entries, metadata: metadata} = Course.all_courses(params)
     courses = Enum.map(entries, fn course -> update_metadate(course) end)
     render(conn, "index.json", infinite_cursor: %{entries: courses, metadata: metadata})
   end
 
   def show(conn, %{"id" => id}) do
-    case App.get_course(id) do
+    case Course.get_course(id) do
       nil ->
         json(conn, %{error: "not found"})
 
@@ -22,8 +22,7 @@ defmodule CollegeWeb.CourseController do
 
   def create(conn, params) do
     params = Map.put(params, "branch", String.downcase(params["branch"]))
-
-    case App.create_course(params) do
+    case Course.create_course(params) do
       {:ok, course} ->
         course = update_metadate(course)
         render(conn, "create.json", course: course |> Repo.preload([:teacher, :students]))
@@ -40,8 +39,7 @@ defmodule CollegeWeb.CourseController do
 
   def create_teaacher_with_course(conn, params) do
     params = Map.put(params, "branch", String.downcase(params["branch"]))
-
-    case App.create_course_teacher(params) do
+    case Course.create_course_teacher(params) do
       {:ok, %{course: course, teacher: teacher}} ->
         course = update_metadate(course)
         render(conn, "create.json", course_teacher: [course, teacher])
@@ -60,7 +58,7 @@ defmodule CollegeWeb.CourseController do
   end
 
   def delete(conn, %{"id" => id}) do
-    case App.delete_course(String.to_integer(id)) do
+    case Course.delete_course(String.to_integer(id)) do
       {:error, "not found"} -> json(conn, %{error: "not found"})
       course -> render(conn, "delete.json", course: course)
     end
@@ -68,8 +66,7 @@ defmodule CollegeWeb.CourseController do
 
   def update(conn, params) do
     params = Map.put(params, "branch", String.downcase(params["branch"]))
-
-    case App.update_course(params) do
+    case Course.update_course(params) do
       {:ok, course} ->
         course = update_metadate(course)
         render(conn, "update.json", course: course |> Repo.preload([:teacher, :students]))
@@ -87,7 +84,7 @@ defmodule CollegeWeb.CourseController do
     end
   end
 
-  defp update_metadate(course) do
+  def update_metadate(course) do
     metadata = Map.from_struct(course.metadata)
     Map.replace(course, :metadata, metadata)
   end

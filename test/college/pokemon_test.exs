@@ -10,7 +10,7 @@ defmodule College.PokemonTest do
 
   describe "get_http/1" do
     test ":ok on 200" do
-      expect(PokemonBehaviourMock, :get_http, fn args ->
+      expect(ClientBehaviourMock, :get_http, fn args ->
         assert args == "https://pokeapi.co/api/v2/pokemon?offset=0&limit=10"
         {:ok, %HTTPoison.Response{body: "some pokemon", status_code: 200}}
       end)
@@ -20,7 +20,7 @@ defmodule College.PokemonTest do
     end
 
     test ":error on 404" do
-      expect(PokemonBehaviourMock, :get_http, fn args ->
+      expect(ClientBehaviourMock, :get_http, fn args ->
         assert args == "https://pokeapi.co/api/v2/pokemon?offset=0&limit=10"
         {:ok, %HTTPoison.Response{status_code: 404}}
       end)
@@ -32,7 +32,7 @@ defmodule College.PokemonTest do
 
   describe "get_pokemon saved api" do
     test "compatibility between the real api response and the expected data" do
-      expect(PokemonBehaviourMock, :get_pokemon, fn _limit, _offset ->
+      expect(ClientBehaviourMock, :get_pokemon, fn _limit, _offset ->
         pokemon_api = %__MODULE__{}
         {:ok, response} = pokemon_api.response
         {:ok, response}
@@ -47,7 +47,7 @@ defmodule College.PokemonTest do
 
   describe "get_pokemon/2" do
     test "fetches pokemons based on specified limit and offset" do
-      Mox.stub(PokemonBehaviourMock, :get_pokemon, fn _limit, _offset ->
+      Mox.stub(ClientBehaviourMock, :get_pokemon, fn _limit, _offset ->
         response = %{
           "count" => 1126,
           "next" => "https://pokeapi.co/api/v2/pokemon?offset=10&limit=10",
