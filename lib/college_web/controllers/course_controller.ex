@@ -21,6 +21,8 @@ defmodule CollegeWeb.CourseController do
   end
 
   def create(conn, params) do
+    params = Map.put(params, "branch", String.downcase(params["branch"]))
+
     case App.create_course(params) do
       {:ok, course} ->
         course = update_metadate(course)
@@ -37,6 +39,8 @@ defmodule CollegeWeb.CourseController do
   end
 
   def create_teaacher_with_course(conn, params) do
+    params = Map.put(params, "branch", String.downcase(params["branch"]))
+
     case App.create_course_teacher(params) do
       {:ok, %{course: course, teacher: teacher}} ->
         course = update_metadate(course)
@@ -63,6 +67,8 @@ defmodule CollegeWeb.CourseController do
   end
 
   def update(conn, params) do
+    params = Map.put(params, "branch", String.downcase(params["branch"]))
+
     case App.update_course(params) do
       {:ok, course} ->
         course = update_metadate(course)

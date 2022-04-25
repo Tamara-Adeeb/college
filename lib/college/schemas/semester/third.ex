@@ -1,9 +1,9 @@
-defmodule  College.Schemas.Semester.Third do
+defmodule College.Schemas.Semester.Third do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
-  
+
   embedded_schema do
     field :period, :string
     field :is_honor, :boolean
@@ -15,5 +15,4 @@ defmodule  College.Schemas.Semester.Third do
     |> cast(params, ~w(period is_honor is_research)a)
     |> validate_required(~w(period is_honor is_research)a)
   end
-
 end

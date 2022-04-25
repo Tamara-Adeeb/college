@@ -1,4 +1,4 @@
-defmodule  College.Schemas.Semester.Second do
+defmodule College.Schemas.Semester.Second do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -14,5 +14,4 @@ defmodule  College.Schemas.Semester.Second do
     |> cast(params, ~w(period is_optional)a)
     |> validate_required(~w(period is_optional)a)
   end
-
 end
