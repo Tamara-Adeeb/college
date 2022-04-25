@@ -1,6 +1,6 @@
 defmodule CollegeWeb.StudentController do
   use CollegeWeb, :controller
-  alias College.{Student , Course}
+  alias College.{Student, Course}
   alias College.Repo
 
   def index(conn, params) do
@@ -46,7 +46,7 @@ defmodule CollegeWeb.StudentController do
         student_course = student_course |> Repo.preload([:course, :student])
         student = student_course.student
         course = Course.update_metadate(student_course.course)
-        render(conn, "register_course.json", student_course: {student , course})
+        render(conn, "register_course.json", student_course: {student, course})
 
       {:error, reason} ->
         render(conn, "error.json", error: reason.errors)

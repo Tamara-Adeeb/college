@@ -5,9 +5,9 @@ defmodule College.Schemas.Semester.Fourth do
   @primary_key false
 
   embedded_schema do
-    field :period, :string
-    field :is_honor, :boolean
-    field :is_research, :boolean
+    field(:period, :string)
+    field(:is_honor, :boolean)
+    field(:is_research, :boolean)
   end
 
   def changeset(fourth, params) do

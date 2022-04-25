@@ -1,4 +1,4 @@
-defmodule  College.Authentication.Guardian do
+defmodule College.Authentication.Guardian do
   use Guardian, otp_app: :college
   alias College.App
 
@@ -12,5 +12,4 @@ defmodule  College.Authentication.Guardian do
     resource = App.get_by_id(id)
     {:ok, resource}
   end
-
 end

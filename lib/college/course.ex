@@ -5,8 +5,9 @@ defmodule College.Course do
 
   def all_courses(params) do
     query =
-      from c in Course,
+      from(c in Course,
         order_by: [asc: c.inserted_at, asc: c.id]
+      )
 
     Repo.paginate(query,
       before: params["before"],

@@ -22,19 +22,16 @@ defmodule College.StudentControllerTest do
   }
   @invalid_required_attrs %{}
 
+  #   describe "create" do
+  #     test "render student when data is valid", %{conn: conn} do
+  #       conn = post(conn, Routes.student_path(conn, :create), @create_attrs)
+  #       assert  %{
+  #         "courses" => [],
+  #         "email" => "test@gmail.com",
+  #         "first_name" => "Ali",
+  #         "last_name" => "Adeeb"
+  #       } ==  json_response(conn, 200)["data"]
 
-#   describe "create" do
-#     test "render student when data is valid", %{conn: conn} do
-#       conn = post(conn, Routes.student_path(conn, :create), @create_attrs)
-#       assert  %{
-#         "courses" => [],
-#         "email" => "test@gmail.com",
-#         "first_name" => "Ali",
-#         "last_name" => "Adeeb"
-#       } ==  json_response(conn, 200)["data"]
-
-#   end
-# end
-
-
+  #   end
+  # end
 end

@@ -18,15 +18,15 @@ defmodule College.Schemas.Course do
   @science_branches ["physics", "biology", "chemistry", "math", "anatomy", "statistics"]
 
   schema "courses" do
-    field :name, :string
-    field :code, :string
-    field :faculty, Ecto.Enum, values: [:history, :engineering, :art, :science, :law]
+    field(:name, :string)
+    field(:code, :string)
+    field(:faculty, Ecto.Enum, values: [:history, :engineering, :art, :science, :law])
 
-    field :branch, :string
+    field(:branch, :string)
 
-    field :semester, Ecto.Enum, values: [:first, :second, :third, :fourth], null: false
+    field(:semester, Ecto.Enum, values: [:first, :second, :third, :fourth], null: false)
 
-    field :metadata, PolymorphicEmbed,
+    field(:metadata, PolymorphicEmbed,
       types: [
         first: First,
         second: Second,
@@ -35,13 +35,15 @@ defmodule College.Schemas.Course do
       ],
       on_type_not_found: :changeset_error,
       on_replace: :update
+    )
 
-    field :description, :string
-    belongs_to :teacher, College.Schemas.Teacher
+    field(:description, :string)
+    belongs_to(:teacher, College.Schemas.Teacher)
 
-    many_to_many :students, College.Schemas.Student,
+    many_to_many(:students, College.Schemas.Student,
       join_through: College.Schemas.StudentsCourses,
       on_replace: :delete
+    )
 
     timestamps()
   end

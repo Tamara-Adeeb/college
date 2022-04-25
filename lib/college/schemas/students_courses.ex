@@ -3,8 +3,8 @@ defmodule College.Schemas.StudentsCourses do
   import Ecto.Changeset
 
   schema "students_courses" do
-    belongs_to :student, College.Schemas.Student
-    belongs_to :course, College.Schemas.Course
+    belongs_to(:student, College.Schemas.Student)
+    belongs_to(:course, College.Schemas.Course)
 
     timestamps()
   end
