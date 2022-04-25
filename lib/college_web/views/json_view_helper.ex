@@ -1,5 +1,6 @@
 defmodule CollegeWeb.JsonViewHelper do
-  import Phoenix.View #only: [render_one: 3, render_many: 3]
+  # only: [render_one: 3, render_many: 3]
+  import Phoenix.View
   # use CollegeWeb, :view
 
   def render_json(struct, view, fields, relationships \\ []) do
@@ -26,10 +27,10 @@ defmodule CollegeWeb.JsonViewHelper do
   end
 
   def render("error.json", %{error: error}) do
-    render_many(error, __MODULE__,"show_error.json")
+    render_many(error, __MODULE__, "show_error.json")
   end
 
-  def render("show_error.json",%{error: error}) do
+  def render("show_error.json", %{error: error}) do
     {
       field,
       {text, validation}
@@ -38,6 +39,5 @@ defmodule CollegeWeb.JsonViewHelper do
     %{
       "#{field}": "#{text} #{inspect(validation)}"
     }
-
   end
 end

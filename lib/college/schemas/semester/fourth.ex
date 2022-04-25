@@ -1,9 +1,9 @@
-defmodule  College.Schemas.Semester.Fourth do
+defmodule College.Schemas.Semester.Fourth do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
-  
+
   embedded_schema do
     field :period, :string
     field :is_honor, :boolean
